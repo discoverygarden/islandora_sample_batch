@@ -1,0 +1,8 @@
+name = Sample Batch
+description = Sample batch preprocessor to demonstrate the batch classes; generates binary objects from a folder.
+package = Islandora Tools
+core = 7.x
+version - 7.x-dev
+dependencies[] = islandora_batch
+dependencies[] = islandora_binary_object
+files[] = includes/batch.inc
