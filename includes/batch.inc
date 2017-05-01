@@ -11,6 +11,21 @@
 class SampleBatchPreprocessor extends IslandoraBatchPreprocessor {
 
   /**
+   * Gets the correct content model for a filename.
+   *
+   * @TODO: This mapping should be fleshed out with all the content models and
+   * mimetypes the batch intends to generate.
+   */
+  protected function getContentModel($file) {
+    $map = array(
+      'application/pdf' => 'islandora:sp_pdf',
+      'audio/wav' => 'islandora:sp-audioCModel',
+    );
+    $mime = file_get_mimetype($file);
+    return isset($map[$mime]) ? $map[$mime] : 'islandora:binaryObjectCModel';
+  }
+
+  /**
    * Really, all we need is this.
    *
    * This function should generate batch objects extended from
@@ -33,6 +48,7 @@ class SampleBatchPreprocessor extends IslandoraBatchPreprocessor {
         'file' => $this->parameters['path'] . '/' . $file,
         'namespace' => $this->parameters['namespace'],
         'parent' => $this->parameters['parent'],
+        'cmodel' => $this->getContentModel($file),
       );
       // Generate a new object ...
       $object = new SampleBatchPreprocessorObject($this->connection, $object_params);
@@ -117,7 +133,7 @@ class SampleBatchPreprocessorObject extends IslandoraBatchObject {
   public function addRelationships() {
     // Content models can simply be added using the 'models' parameter of the
     // object itself. Can be an array of strings, or a single string.
-    $this->models = 'islandora:binaryObjectCModel';
+    $this->models = $this->params['cmodel'];
     // Parents are slightly more difficult; we're going to manually set this
     // using the object's 'relationship' object.
     $this->relationships->add(FEDORA_RELS_EXT_URI, 'isMemberOfCollection', $this->params['parent']);

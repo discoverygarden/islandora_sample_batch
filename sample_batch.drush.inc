@@ -89,5 +89,5 @@ function drush_sample_batch_preprocess() {
   $preprocessor = new SampleBatchPreprocessor($connection, $params);
   islandora_batch_handle_preprocessor($preprocessor);
   // Dump out the set ID number.
-  drush_log(dt('Set ID: @id', array('@id' => $preprocessor->getSetId())));
+  drush_print(dt('Set ID: @id', array('@id' => $preprocessor->getSetId())));
 }
